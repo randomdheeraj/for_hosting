@@ -4,6 +4,10 @@ import json
 
 
 connection_string="mongodb+srv://dheerajgajula2202:dheeraj@cluster0.w5zpnhp.mongodb.net/"
+connection_string_meta = "mongodb+srv://dheerajgajula2209:dheeraj@cluster0.akjrg3v.mongodb.net/"
+client_meta = MongoClient(connection_string_meta)
+test_meta = client_meta['test']
+meta_data_collection = test_meta['meta_data']
 client = MongoClient(connection_string)
 test = client['rough']
 test_collection = test['test']
@@ -40,6 +44,21 @@ def high_rating(user_id):
     response = {"product_id":higest_rating['product_id'],"rating":higest_rating['rating']}
     print(response)
     return response
+
+@app.get("/meta_data")
+def meta_data(pid):
+    val = meta_data_collection.find({"asin": pid})
+    meta ={}
+    for n in val:
+        meta = n
+
+    response = {
+        "title":meta['title'],
+        "category":meta['main_cat'],
+        "price": meta['price'],
+    }
+
+    return response   
     
     
 
